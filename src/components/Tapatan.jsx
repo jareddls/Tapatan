@@ -55,18 +55,6 @@ const Tapatan = ({ logic }) => {
         return () => clearInterval(interval);
     }, [board, player]);
 
-    useEffect(() => {
-        if (moving && position.current && position.new) {
-          const newBoard = [...board];
-          newBoard[position.current[0]][position.current[1]] = null;
-          newBoard[position.new[0]][position.new[1]] = "red";
-          setBoard(newBoard);
-          setMoving(false);
-          setPosition({current: null, new: null});
-          setPlayer("blue");
-        }
-      }, [moving, position]);
-
     //logic for winning board state
     function checkForWin(board, player) {
         for (let i = 0; i < winningCombinations.length; i++) {
@@ -116,7 +104,7 @@ const Tapatan = ({ logic }) => {
             else if (playerPieces.length === 3) {
                 console.log(`${rowIndex}, ${columnIndex}`)
                 if (board[rowIndex][columnIndex] === 'red') {
-                    // setPosition({...position, current: [rowIndex, columnIndex]})
+                    setPosition({...position, current: [rowIndex, columnIndex]})
                     setMoving(true);
 
                     console.log(moving);
@@ -134,17 +122,16 @@ const Tapatan = ({ logic }) => {
             //when we click on a player piece it returns the rowIndex and columnIndex
             
         }
-        if (!moving) {
+        if (moving) {
             console.log('now true')
-            setPosition({...position, current: [rowIndex, columnIndex]});
-            // if (board[rowIndex][columnIndex] === null) setPosition(prev =>({...prev, new: [rowIndex, columnIndex]}))
-            // console.log(position)
+            if (board[rowIndex][columnIndex] === null) setPosition(prev =>({...prev, new: [rowIndex, columnIndex]}))
+            console.log(position)
 
-            // if(position.current && position.new){
-            //     newBoard[position.current[0]][position.current[1]] = null
-            //     newBoard[position.new[0]][position.new[1]] = "red"
-            //     setBoard(newBoard);
-            // }
+            if(position.current && position.new){
+                newBoard[position.current[0]][position.current[1]] = null
+                newBoard[position.new[0]][position.new[1]] = "red"
+                setBoard(newBoard);
+            }
         }
         
 
