@@ -67,3 +67,151 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px solid black;
+  width: 225px;
+  height: 225px;
+}
+
+.selected {
+  background-color: yellow;
+}
+
+@font-face {
+  font-family: 'TriumphOutline';
+  src: url('./assets/TriumphOutline.ttf');
+}
+
+@font-face {
+  font-family: 'TriumphRegular';
+  src: url('./assets/TriumphRegular.ttf');
+}
+
+.tapatan-title {
+  font-family: TriumphOutline;
+  font-size: 225px;
+}
+
+.triumph-outline {
+  font-family: TriumphOutline;
+}
+
+.triumph-regular {
+  font-family: TriumphRegular;
+}
+
+.button-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.red {
+  background-color: red;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.white {
+  background-color: white;
+}
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.button-container {
+  margin-top: 150px;
+}
+
+.my-button {
+  font-family: TriumphRegular;
+  min-width: 350px;
+  font-size: 48px;
+  width: 200px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  cursor: pointer;
+  box-shadow: 0 0px 10px rgba(253, 249, 41, 0.25);
+}
+
+/* .button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items:center;
+  width: 400px;
+  margin: auto;
+} */
+
+.top-middle {
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.left {
+  position: fixed;
+  left: 30%;
+  transform: translate(-50%, -50%);
+}
+
+.right {
+  position: fixed;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+.middle-top {
+  position: fixed;
+  top: 30%;
+  transform: translate(-50%, -50%);
+}
+
+.middle-bottom {
+  position: fixed;
+  top: 70%;
+  transform: translate(-50%, -50%);
+}
+
+.transparent-button {
+  background-color: transparent;
+  border: none;
+}
