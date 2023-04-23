@@ -98,7 +98,7 @@ button:focus-visible {
 }
 
 .selected {
-  background-color: yellow;
+  background-color: red;
 }
 
 @font-face {
@@ -131,6 +131,8 @@ button:focus-visible {
   border: none;
   cursor: pointer;
   outline: none;
+  background-color: transparent;
+  position: relative;
 }
 
 .red {

@@ -39,15 +39,11 @@ const Tapatan = ({ logic }) => {
     const [moving, setMoving] = useState(false)
     const [position, setPosition] = useState({current: null, new: null})
 
-
-
     useEffect(() => {
         const interval = setInterval(() => {
             if (player === 'blue' && board.flat().filter(value => value === 'blue').length < 3) {
                 if (logic === 'random_move') {
                     RandomLogic(setBoard, checkForWin, player, setPlayer, board);
-                    console.log('RandomLogic ran!')
-                    console.log(moving);
                 }
             }
         }, 1000);
@@ -83,12 +79,9 @@ const Tapatan = ({ logic }) => {
         //positions state is an object with old position and new position
         //which you set with a click handler
 
-
         //if no spread operator, it'd be a singular array inside newBoard, instead of the multiple values
         const newBoard = [...board];
         if (player == 'red') {
-            
-
             // check if cell is empty
             // check if player has placed all three pieces
             const playerPieces = newBoard.flat().filter(value => value === player);
@@ -106,7 +99,6 @@ const Tapatan = ({ logic }) => {
                 if (board[rowIndex][columnIndex] === 'red') {
                     setPosition({...position, current: [rowIndex, columnIndex]})
                     setMoving(true);
-
                     console.log(moving);
                 }
             }
@@ -133,11 +125,12 @@ const Tapatan = ({ logic }) => {
                 setBoard(newBoard);
             }
         }
-        
 
-
+        //this would only highlight the piece, but its a big yellow square lol
+        if (board[rowIndex][columnIndex] === player) {
+            setSelectedPiece([rowIndex, columnIndex]);
+        }
     };
-
 
     return (
         <div>
@@ -147,7 +140,6 @@ const Tapatan = ({ logic }) => {
             <div className="board" style={{
                 backgroundImage: `url(${TapatanBoard})`,
                 backgroundRepeat: 'no-repeat',
-                // backgroundSize: 'cover',
                 backgroundPosition: `87px 88px`
             }}>
                 {/* <img src ={TapatanBoard} alt="Tapatan Board"/> */}
@@ -160,8 +152,8 @@ const Tapatan = ({ logic }) => {
                             return (
                                 <div
                                     key={columnIndex}
-                                    //highlights the box, but doesn't actually end up working for spaces with pieces on them
-                                    className={`cell ${selectedPiece && rowIndex === selectedPiece[0] && columnIndex === selectedPiece[1] ? 'selected' : ''}`}
+                                    //i forgot why i needed this, but i now can't get rid of it
+                                    className={`cell ${selectedPiece && rowIndex === selectedPiece[0] && columnIndex === selectedPiece[1] ? '' : ''}`}
                                 >
                                     {isRed && <ButtonCircle color="red" onClick={() => handleClick(rowIndex, columnIndex)} />}
                                     {isBlue && <ButtonCircle color="blue" onClick={() => handleClick(rowIndex, columnIndex)} />}
