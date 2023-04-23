@@ -47,9 +47,39 @@ const Tapatan = ({ logic }) => {
                 }
             }
         }, 1000);
-
         return () => clearInterval(interval);
     }, [board, player]);
+
+    useEffect(() => {
+        if (position.current && position.new) {
+          const newBoard = [...board];
+          newBoard[position.current[0]][position.current[1]] = null;
+          newBoard[position.new[0]][position.new[1]] = player;
+          setBoard(newBoard);
+          setPosition({ current: null, new: null });
+          setMoving(false);
+          //setPlayer(player === 'red' ? 'blue' : 'red');
+        }
+      }, [position]);
+
+    // useEffect(() => {
+    //     if (position.current && position.new) {
+    //       const newBoard = [...board];
+    //       newBoard[position.current[0]][position.current[1]] = null;
+    //       newBoard[position.new[0]][position.new[1]] = player;
+    //       setBoard(newBoard);
+    //       setPosition({ current: null, new: null });
+    //       setMoving(false);
+    //       setPlayer(player === 'red' ? 'blue' : 'red');
+    //     } else if (!position.current && !position.new) {
+    //       setMoving(false);
+    //     }
+    //     if (player === 'blue' && board.flat().filter(value => value === 'blue').length < 3) {
+    //       if (logic === 'random_move') {
+    //         RandomLogic(setBoard, checkForWin, player, setPlayer, board);
+    //       }
+    //     }
+    //   }, [position, board, player]);
 
     //logic for winning board state
     function checkForWin(board, player) {
@@ -70,16 +100,16 @@ const Tapatan = ({ logic }) => {
     const handleClick = (rowIndex, columnIndex) => {
         console.log(board)
         //select piece and move it to available adjacent empty spot
-        //make sure it's whoever's turns piece can move
+            //make sure it's whoever's turns piece can move
 
-        //when piece moves delete old position (turn it back to white)
-        //and set new position to players color
+            //when piece moves delete old position (turn it back to white)
+            //and set new position to players color
 
-        //moving state
-        //positions state is an object with old position and new position
-        //which you set with a click handler
+            //moving state
+            //positions state is an object with old position and new position
+            //which you set with a click handler
 
-        //if no spread operator, it'd be a singular array inside newBoard, instead of the multiple values
+            //if no spread operator, it'd be a singular array inside newBoard, instead of the multiple values
         const newBoard = [...board];
         if (player == 'red') {
             // check if cell is empty
@@ -107,6 +137,8 @@ const Tapatan = ({ logic }) => {
 
             if (checkForWin(newBoard, player)) {
                 console.log(`${player} wins!`);
+            } else if (board[rowIndex][columnIndex] !== 'red'){
+                console.log("IT'S EITHER AN EMPTY SQUARE OR BLUE'S PIECE BOZO")
             } else {
                 setPlayer(player === 'red' ? 'blue' : 'red');
             }
