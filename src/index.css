@@ -199,15 +199,9 @@ button:focus-visible {
   transform: translate(-50%, -50%);
 }
 
-.middle-top {
+.middle {
   position: fixed;
-  top: 30%;
-  transform: translate(-50%, -50%);
-}
-
-.middle-bottom {
-  position: fixed;
-  top: 70%;
+  top: 50%;
   transform: translate(-50%, -50%);
 }
 
