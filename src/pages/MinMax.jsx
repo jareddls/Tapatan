@@ -1,8 +1,11 @@
 import React from 'react'
+import Tapatan from '../components/Tapatanv2'
 
 const MinMax = () => {
   return (
-    <div>MinMax</div>
+    <div className='centered'>
+        <Tapatan logic="minmax"/>
+    </div>
   )
 }
 

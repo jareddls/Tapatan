@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import ButtonCircle from './ButtonCircle'
 import TapatanBoard from '../assets/tapatan_board.png'
 import RandomLogic from '../integrations/randomLogic'
+import MinmaxLogic from '../integrations/minmaxLogic'
 
 const Tapatanv2 = ({ logic }) => {
     const [board, setBoard] = useState([
@@ -10,9 +11,10 @@ const Tapatanv2 = ({ logic }) => {
         [null, null, null]
     ])
     const [player, setPlayer] = useState(Math.floor(Math.random() * 2) == 1 ? 'red' : 'blue')
+
+
     const [selectedPiece, setSelectedPiece] = useState(null)
     const [winner, setWinner] = useState(null)
-    // const [playerPieces, setPlayerPieces] = useState([])
     const playerPiecesRef = useRef([])
 
     const winningCombinations = [
@@ -46,14 +48,26 @@ const Tapatanv2 = ({ logic }) => {
                     if (logic === 'random_move') {
                         RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
+                    else if (logic === 'minmax') {
+                        MinmaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    }
                 }
                 else if (player === 'blue' && board.flat().filter(value => value === 'blue').length >= 3) {
-                    RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    if (logic === 'random_move') {
+                        RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    }
+                    else if (logic === 'minmax') {
+                        MinmaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    }
                 }
             }, 1000)
             return () => clearInterval(interval)
         }
     }, [board, player, winner])
+
+    useEffect(() => {
+        playerPiecesRef.current = board.flat().filter(value => value === player)
+      }, [board, player])
 
     function checkForWin(board, player) {
         for (let i = 0; i < winningCombinations.length; i++) {
@@ -86,7 +100,7 @@ const Tapatanv2 = ({ logic }) => {
         const newBoard = [...board]
         if (player === 'red') {
 
-            playerPiecesRef.current = newBoard.flat().filter(value => value === player)
+            // playerPiecesRef.current = newBoard.flat().filter(value => value === player)
             if (playerPiecesRef.current.length < 3) {
                 // place new piece on the board
                 //if board is null set to player color, if not set it to what it originally was
@@ -99,7 +113,7 @@ const Tapatanv2 = ({ logic }) => {
                     }
                     setPlayer(player === 'red' ? 'blue' : 'red')
 
-                    console.log(`My pieces: ${playerPiecesRef.current.length + 1}`)
+                    console.log(`My pieces: ${playerPiecesRef.current.length}`)
                 }
             }
             else if (playerPiecesRef.current.length === 3) {
@@ -113,66 +127,6 @@ const Tapatanv2 = ({ logic }) => {
                     console.log(`${player} wins!`)
                 }
                 else if (selectedPiece) {
-                    // if (!board[rowIndex][columnIndex]) {
-                    //     if (selectedPiece[0] === 0 && selectedPiece[1] == 0){
-                    //         if ((rowIndex === 0 && columnIndex === 1) || (rowIndex === 1 && columnIndex === 0) || (rowIndex === 1 && columnIndex === 1)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 0 && selectedPiece[1] == 1){
-                    //         if ((rowIndex === 0 && columnIndex === 0) || (rowIndex === 1 && columnIndex === 1) || (rowIndex === 0 && columnIndex === 2)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 0 && selectedPiece[1] == 2){
-                    //         if ((rowIndex === 0 && columnIndex === 1) || (rowIndex === 1 && columnIndex === 1) || (rowIndex === 1 && columnIndex === 2)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 1 && selectedPiece[1] == 0){
-                    //         if ((rowIndex === 0 && columnIndex === 0) || (rowIndex === 2 && columnIndex === 0) || (rowIndex === 1 && columnIndex === 1)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 1 && selectedPiece[1] == 1){
-                    //         if ((rowIndex === 0 && columnIndex === 0) || (rowIndex === 0 && columnIndex === 1) || (rowIndex === 0 && columnIndex === 2) ||
-                    //             (rowIndex === 1 && columnIndex === 0) || (rowIndex === 1 && columnIndex === 2) || 
-                    //             (rowIndex === 2 && columnIndex === 0) || (rowIndex === 2 && columnIndex === 1) || (rowIndex === 2 && columnIndex === 2)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 1 && selectedPiece[1] == 2){
-                    //         if ((rowIndex === 0 && columnIndex === 2) || (rowIndex === 1 && columnIndex === 1) || (rowIndex === 2 && columnIndex === 2)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 2 && selectedPiece[1] == 0){
-                    //         if ((rowIndex === 1 && columnIndex === 0) || (rowIndex === 1 && columnIndex === 1) || (rowIndex === 2 && columnIndex === 1)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 2 && selectedPiece[1] == 1){
-                    //         if ((rowIndex === 2 && columnIndex === 0) || (rowIndex === 1 && columnIndex === 1) || (rowIndex === 2 && columnIndex === 2)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                    //     else if (selectedPiece[0] === 2 && selectedPiece[1] == 2){
-                    //         if ((rowIndex === 2 && columnIndex === 1) || (rowIndex === 1 && columnIndex === 1) || (rowIndex === 1 && columnIndex === 2)){
-                    //             placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //         }
-                            
-                    //     }
-                        //placePiece(newBoard, rowIndex, columnIndex, selectedPiece)
-                    //}
-
                     if (!board[rowIndex][columnIndex]) {
                         const validPositions = validMoves.find(move => move.piece[0] === selectedPiece[0] && move.piece[1] === selectedPiece[1]).positions;
                         if (validPositions.some(position => position[0] === rowIndex && position[1] === columnIndex)) {
@@ -182,16 +136,12 @@ const Tapatanv2 = ({ logic }) => {
 
                 }
                 else if (board[rowIndex][columnIndex] !== 'blue' || board[rowIndex][columnIndex] !== 'red' || board[rowIndex][columnIndex] !== null) {
-                    console.log('shouldn\'t be allowed to click on anything right now')
+                    console.log('invalid option!')
                 }
                 else {
-                    // console.log('the player got changed')
                     setPlayer(player === 'red' ? 'blue' : 'red')
                 }
                 console.log(`${rowIndex}, ${columnIndex}`)
-                //if (board[rowIndex][columnIndex] === 'red') {
-                //    setPosition({...position, current: [rowIndex, columnIndex]}) 
-                //}
             }
 
 

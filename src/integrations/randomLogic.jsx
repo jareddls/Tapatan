@@ -3,7 +3,9 @@ import React from 'react'
 //to help bot make random move 
 //eventually will be implementing AI methods here
 //or different file
-const RandomLogic = (setBoard, checkForWin, player, setPlayer, board) => {
+
+// setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current
+const RandomLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner, playerPieces) => {
     //copies current board state into a newBoard
     const newBoard = [...board];
 
@@ -11,17 +13,8 @@ const RandomLogic = (setBoard, checkForWin, player, setPlayer, board) => {
     let rowIndex = Math.floor(Math.random() * 3);
     let columnIndex = Math.floor(Math.random() * 3);
 
-<<<<<<< Updated upstream
-    //however if it isn't a null board state then keep choosing
-    //a random spot in the board until the value is null
-    while (newBoard[rowIndex][columnIndex] !== null) {
-        rowIndex = Math.floor(Math.random() * 3);
-        columnIndex = Math.floor(Math.random() * 3);
-    }
+    console.log(`PLAYER PIECES: ${playerPieces}`)
 
-    //we adjust the state to have the bot's color in it
-    newBoard[rowIndex][columnIndex] = 'blue';
-=======
     function movePiece(validChoices, pieceToMove) {
         let emptyValidChoices = [];
         for (let i = 0; i < validChoices.length; i++) {
@@ -54,7 +47,7 @@ const RandomLogic = (setBoard, checkForWin, player, setPlayer, board) => {
 
     //however if it isn't a null board state then keep choosing
     //a random spot in the board until the value is null
-    if (playerPieces.length < 3) {
+    if (playerPieces.length < 3 ) {
         while (newBoard[rowIndex][columnIndex] !== null) {
             rowIndex = Math.floor(Math.random() * 3);
             columnIndex = Math.floor(Math.random() * 3);
@@ -62,7 +55,7 @@ const RandomLogic = (setBoard, checkForWin, player, setPlayer, board) => {
 
         //we adjust the state to have the bot's color in it
         newBoard[rowIndex][columnIndex] = 'blue';
-        console.log(`Bot pieces amount: ${playerPieces.length + 1}`)
+        console.log(`Bot pieces amount: ${playerPieces.length}`)
     }
     else if (playerPieces.length === 3) {
         console.log('BLUE HAS REACHED MAX PIECES')
@@ -102,25 +95,18 @@ const RandomLogic = (setBoard, checkForWin, player, setPlayer, board) => {
         const validChoicesForPiece = validChoices[pieceToMove[0]][pieceToMove[1]];
         movePiece(validChoicesForPiece, pieceToMove);
 
-
     }
->>>>>>> Stashed changes
 
     //sets theboard to the updated board
     setBoard(newBoard);
 
     if (checkForWin(newBoard, player)) {
         console.log(`${player} wins!`);
+        setWinner(player)
     } else {
         setPlayer(player === 'red' ? 'blue' : 'red');
     }
-<<<<<<< Updated upstream
-    // //changes player to us the human
-    // setPlayer('red');
-};
-=======
 
 }
->>>>>>> Stashed changes
 
 export default RandomLogic

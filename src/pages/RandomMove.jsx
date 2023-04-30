@@ -1,5 +1,5 @@
 import React from 'react'
-import Tapatan from '../components/Tapatan'
+import Tapatan from '../components/Tapatanv2'
 
 const RandomMove = () => {
   return (
