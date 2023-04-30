@@ -4,7 +4,7 @@ import Tapatan from '../components/Tapatanv2'
 const MinMax = () => {
   return (
     <div className='centered'>
-        <Tapatan logic="minmax"/>
+        <Tapatan logic="minimax"/>
     </div>
   )
 }

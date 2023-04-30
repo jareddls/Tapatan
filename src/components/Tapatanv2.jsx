@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import ButtonCircle from './ButtonCircle'
 import TapatanBoard from '../assets/tapatan_board.png'
 import RandomLogic from '../integrations/randomLogic'
-import MinmaxLogic from '../integrations/minmaxLogic'
+import MinimaxLogic from '../integrations/minimaxLogic'
 
 const Tapatanv2 = ({ logic }) => {
     const [board, setBoard] = useState([
@@ -49,7 +49,7 @@ const Tapatanv2 = ({ logic }) => {
                         RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
                     else if (logic === 'minmax') {
-                        MinmaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                        MinimaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
                 }
                 else if (player === 'blue' && board.flat().filter(value => value === 'blue').length >= 3) {
@@ -57,7 +57,7 @@ const Tapatanv2 = ({ logic }) => {
                         RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
                     else if (logic === 'minmax') {
-                        MinmaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                        MinimaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
                 }
             }, 1000)

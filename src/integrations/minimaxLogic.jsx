@@ -1,10 +1,10 @@
 import React from 'react';
 
-const MinmaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner, playerPieces) => {
+const MinimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner, playerPieces) => {
     //make a newBoard that contains what board had
     const newBoard = [...board];
 
-    function minmax(board, depth, maximizingPlayer) {
+    function minimax(board, depth, maximizingPlayer) {
         //when we finish searching return the score of the board
         if (depth === 0) {
             return evaluate(board);
@@ -71,7 +71,7 @@ const MinmaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner,
     //finds valid moves for a given position
     function findValidMoves(board, row, col) {
         const validMoves = [];
-        if (board[row][col] === null) {
+        if (board[row][col] === blue) {
             //check horizontal moves
             if (board[row][(col + 1) % 3] === null) {
                 validMoves.push([row, (col + 1) % 3]);
@@ -197,4 +197,4 @@ const MinmaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner,
 //because depending on depth, it looks even further, and it's kinda good to just
 //have a really well coded way to figure out available moves, or hard code every single
 //possible state, which might take MUCH longer even though the board is small
-export default MinmaxLogic;
+export default MinimaxLogic;
