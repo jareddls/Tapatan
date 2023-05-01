@@ -48,7 +48,7 @@ const Tapatanv2 = ({ logic }) => {
                     if (logic === 'random_move') {
                         RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
-                    else if (logic === 'minmax') {
+                    else if (logic === 'minimax') {
                         MinimaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
                 }
@@ -56,7 +56,7 @@ const Tapatanv2 = ({ logic }) => {
                     if (logic === 'random_move') {
                         RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
-                    else if (logic === 'minmax') {
+                    else if (logic === 'minimax') {
                         MinimaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
                     }
                 }

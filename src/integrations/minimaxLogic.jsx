@@ -28,7 +28,7 @@ const MinimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner
                 for (let j = 0; j < board[i].length; j++) {
                     if (board[i][j] === null) {
                         board[i][j] = 'blue';
-                        let score = minmax(board, depth - 1, false);
+                        let score = minimax(board, depth - 1, false);
                         board[i][j] = null;
                         bestScore = Math.max(score, bestScore);
                     }
@@ -43,7 +43,7 @@ const MinimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner
                 for (let j = 0; j < board[i].length; j++) {
                     if (board[i][j] === null) {
                         board[i][j] = 'red';
-                        let score = minmax(board, depth - 1, true);
+                        let score = minimax(board, depth - 1, true);
                         board[i][j] = null;
                         bestScore = Math.min(score, bestScore);
                     }
@@ -71,7 +71,7 @@ const MinimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner
     //finds valid moves for a given position
     function findValidMoves(board, row, col) {
         const validMoves = [];
-        if (board[row][col] === blue) {
+        if (board[row][col] === null) {
             //check horizontal moves
             if (board[row][(col + 1) % 3] === null) {
                 validMoves.push([row, (col + 1) % 3]);
@@ -119,6 +119,10 @@ const MinimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner
     //     return bestMove;
     // }
 
+    //purpose of this is to give our AI a valid option of pieces to move
+    //we give it a blue piece location, and then as long as it has an empty
+    //space it counts as a valid piece. 
+    //each time it runs throug
     function findBestMove(board) {
         let bestScore = -Infinity;
         let bestMove = null;
@@ -140,7 +144,7 @@ const MinimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner
                     for (let k = 0; k < validMoves.length; k++) {
                         const [row, col] = validMoves[k];
                         board[row][col] = 'red';
-                        let score = minmax(board, 5, false);
+                        let score = minimax(board, 5, false);
                         board[row][col] = null;
                         bestScore = Math.max(score, bestScore);
                         if (score === bestScore) {

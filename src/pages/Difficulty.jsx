@@ -13,8 +13,8 @@ const Difficulty = () => {
             <div className="triumph-outline top-middle" style={{fontSize:'70px', whiteSpace: 'nowrap'}}>
                 CHOOSE YOUR ALGORITHM
             </div>
-                <button className="my-button middle left" onClick={() => handleOnClick('/minmax')}>
-                    MinMax
+                <button className="my-button middle left" onClick={() => handleOnClick('/minimax')}>
+                    MiniMax
                 </button>
                 <button className="my-button middle right" onClick={() => handleOnClick('/random_move')}>
                     Random

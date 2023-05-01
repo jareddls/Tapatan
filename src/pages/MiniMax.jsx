@@ -1,7 +1,7 @@
 import React from 'react'
 import Tapatan from '../components/Tapatanv2'
 
-const MinMax = () => {
+const MiniMax = () => {
   return (
     <div className='centered'>
         <Tapatan logic="minimax"/>
@@ -9,4 +9,4 @@ const MinMax = () => {
   )
 }
 
-export default MinMax
+export default MiniMax
