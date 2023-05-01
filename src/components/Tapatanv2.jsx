@@ -3,8 +3,18 @@ import ButtonCircle from './ButtonCircle'
 import TapatanBoard from '../assets/tapatan_board.png'
 import RandomLogic from '../integrations/randomLogic'
 import MinimaxLogic from '../integrations/minimaxLogic'
+import victoryFX from '../assets/won_vs_bot.mp3'
+import placingFX from '../assets/place_piece.mp3'
 
 const Tapatanv2 = ({ logic }) => {
+    const victorySound = () => {
+        new Audio(victoryFX).play()
+    }
+
+    const placingSound = () => {
+        new Audio(placingFX).play()
+    }
+
     const [board, setBoard] = useState([
         [null, null, null],
         [null, null, null],
@@ -91,6 +101,12 @@ const Tapatanv2 = ({ logic }) => {
 
         if (checkForWin(newBoard, player)) {
             setWinner(player)
+            if (player === 'red') {
+                victorySound()
+            }
+            else if (player === 'blue') {
+                defeatSound()
+            }
             console.log(`${player} wins!`)
         } else setPlayer(player === 'red' ? 'blue' : 'red')
     }
@@ -99,7 +115,6 @@ const Tapatanv2 = ({ logic }) => {
     const handleClick = (rowIndex, columnIndex) => {
         const newBoard = [...board]
         if (player === 'red') {
-
             // playerPiecesRef.current = newBoard.flat().filter(value => value === player)
             if (playerPiecesRef.current.length < 3) {
                 // place new piece on the board
@@ -109,6 +124,9 @@ const Tapatanv2 = ({ logic }) => {
                     setBoard(newBoard)
                     if (checkForWin(newBoard, player)) {
                         setWinner(player)
+                        //this one works only for red
+                        victorySound()
+
                         console.log(`${player} wins!`)
                     }
                     setPlayer(player === 'red' ? 'blue' : 'red')
@@ -124,6 +142,7 @@ const Tapatanv2 = ({ logic }) => {
 
                 if (checkForWin(newBoard, player)) {
                     setWinner(player)
+                        victorySound()
                     console.log(`${player} wins!`)
                 }
                 else if (selectedPiece) {
@@ -143,7 +162,7 @@ const Tapatanv2 = ({ logic }) => {
                 }
                 console.log(`${rowIndex}, ${columnIndex}`)
             }
-
+            placingSound()
 
 
         }

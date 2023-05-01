@@ -1,4 +1,5 @@
 import React from 'react'
+import defeatFX from '../assets/lost_vs_bot.mp3'
 
 //to help bot make random move 
 //eventually will be implementing AI methods here
@@ -6,8 +7,13 @@ import React from 'react'
 
 // setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current
 const RandomLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner, playerPieces) => {
+
     //copies current board state into a newBoard
     const newBoard = [...board];
+    
+    const defeatSound = () => {
+        new Audio(defeatFX).play()
+    }
 
     //selects a random value in the board
     let rowIndex = Math.floor(Math.random() * 3);
@@ -103,6 +109,7 @@ const RandomLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner,
     if (checkForWin(newBoard, player)) {
         console.log(`${player} wins!`);
         setWinner(player)
+        defeatSound()
     } else {
         setPlayer(player === 'red' ? 'blue' : 'red');
     }

@@ -98,7 +98,7 @@ const MinimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner
         if (playerPieces.length < 3) {
             for (let i = 0; i < newBoard.length; ++i) {
                 for (let j = 0; j < newBoard[i].length; ++j) {
-                    if(newBoard[i][j] == null) {
+                    if(newBoard[i][j] === null) {
                         newBoard[i][j] = 'blue'
                         //lets give a depth of 10
                         let score = minimax(newBoard, 10, false)
