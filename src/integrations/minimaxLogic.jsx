@@ -1,6 +1,6 @@
 import React from 'react'
 
-const minimaxLogicv2 = (setBoard, checkForWin, player, setPlayer, board, setWinner, playerPieces) => {
+const minimaxLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner, playerPieces) => {
     const newBoard = [...board]
 
     //give it the board, the depth we want to look at, and the boolean if it's maximizing player
@@ -383,4 +383,4 @@ const minimaxLogicv2 = (setBoard, checkForWin, player, setPlayer, board, setWinn
     }
 }
 
-export default minimaxLogicv2
+export default minimaxLogic
