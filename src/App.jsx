@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Difficulty from './pages/Difficulty'
 import Landing from './pages/Landing'
-import MinMax from './pages/MinMax'
+import MiniMax from './pages/MiniMax'
 import RandomMove from './pages/RandomMove'
 
 const App = () => {
@@ -11,11 +11,11 @@ const App = () => {
 
       <Routes>
         {/* default */}
-        <Route path='/' element={<Landing />} />
+        <Route path='/' element={<Landing />}/>
 
-        <Route path='/difficulty' element={<Difficulty />} />
+        <Route path='/difficulty' element={<Difficulty />}/>
 
-        <Route path='/minmax' element={<MinMax />} />
+        <Route path='/minimax' element={<MiniMax />} />
 
         <Route path='/random_move' element={<RandomMove />} />
       </Routes>
