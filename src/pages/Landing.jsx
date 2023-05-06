@@ -2,6 +2,10 @@ import React from 'react'
 import Button from '../components/Button'
 
 const Landing = () => {
+  // useEffect(() => {
+  //   document.title = 'TAPATAN'; // set the title of the tab
+  // }, []);
+
   return (
     <div className='landing-container'>
         <div className='centered tapatan-title' style={{top: '40%', left: '50%'}}>

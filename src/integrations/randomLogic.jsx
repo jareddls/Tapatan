@@ -2,7 +2,7 @@ import React from 'react'
 import defeatFX from '../assets/lost_vs_bot.mp3'
 
 //to help bot make random move 
-//eventually will be implementing AI methods here
+//eventually will be implementing minimax here
 //or different file
 
 // setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current
@@ -33,6 +33,20 @@ const RandomLogic = (setBoard, checkForWin, player, setPlayer, board, setWinner,
         while (emptyValidChoices.length === 0) {
             // If there are no empty valid choices, choose a new random piece to move
             pieceToMove = [Math.floor(Math.random() * 3), Math.floor(Math.random() * 3)];
+
+            //think about implementing something similar to this for the actions function
+
+            //represent action as a 4-tuple
+            //example action (1, 1, 0, 0)
+            //take middle piece and move it to top left
+            //x x o
+            //x - o
+            //- o -
+            //[ (0,1,1,1), (1,0,2,0), (1,0,1,1), (0,0,1,1) ] --- possible moves
+
+
+            //[ (-1,-1, 0,0)] could possibly represent bringing in a new piece to 0,0
+
             validChoices = validChoicesForPiece = validChoices[pieceToMove[0]][pieceToMove[1]];
             emptyValidChoices = [];
             for (let i = 0; i < validChoices.length; i++) {

@@ -11,9 +11,9 @@ const App = () => {
 
       <Routes>
         {/* default */}
-        <Route path='/' element={<Landing />} />
+        <Route path='/' element={<Landing />}/>
 
-        <Route path='/difficulty' element={<Difficulty />} />
+        <Route path='/difficulty' element={<Difficulty />}/>
 
         <Route path='/minimax' element={<MiniMax />} />
 

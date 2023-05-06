@@ -1,23 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import ButtonCircle from './ButtonCircle';
+import React, { useState, useEffect, useRef } from 'react'
+import ButtonCircle from './ButtonCircle'
 import TapatanBoard from '../assets/tapatan_board.png'
 import RandomLogic from '../integrations/randomLogic'
+import MinimaxLogic from '../integrations/minimaxLogic'
+import victoryFX from '../assets/won_vs_bot.mp3'
+import placingFX from '../assets/place_piece.mp3'
 
-//destructuring from (props) to ({logic})
-//allows us to call logic instead of props.logic
-// example:
-// let obj = {a: '1', b: '2'}
-// let {a, b} = obj
-// console.log(a) logs '1'
 const Tapatan = ({ logic }) => {
-    //creates empty board with values of null
+    const victorySound = () => {
+        new Audio(victoryFX).play()
+    }
+
+    const placingSound = () => {
+        new Audio(placingFX).play()
+    }
+
     const [board, setBoard] = useState([
         [null, null, null],
         [null, null, null],
         [null, null, null]
-    ]);
+    ])
+    const [player, setPlayer] = useState(Math.floor(Math.random() * 2) == 1 ? 'red' : 'blue')
 
-    //all possible winning combinations
+
+    const [selectedPiece, setSelectedPiece] = useState(null)
+    const [winner, setWinner] = useState(null)
+    const playerPiecesRef = useRef([])
+
     const winningCombinations = [
         [[0, 0], [0, 1], [0, 2]],
         [[1, 0], [1, 1], [1, 2]],
@@ -27,141 +36,161 @@ const Tapatan = ({ logic }) => {
         [[0, 2], [1, 2], [2, 2]],
         [[0, 0], [1, 1], [2, 2]],
         [[0, 2], [1, 1], [2, 0]],
-    ];
+    ]
 
-    //creates adjustable player with default starting value of red
-    //which is player one
-    const [player, setPlayer] = useState(Math.floor(Math.random() * 2) == 1 ? 'red' : 'blue');
-
-    //should allow us to select a piece that already exists
-    //currently does not work the way i want it to
-    const [selectedPiece, setSelectedPiece] = useState(null);
-    const [moving, setMoving] = useState(false)
-    const [position, setPosition] = useState({current: null, new: null})
-
+    const validMoves = [
+        {piece: [0, 0], positions: [[0, 1], [1, 0], [1, 1]]},
+        {piece: [0, 1], positions: [[0, 0], [0, 2], [1, 1]]},
+        {piece: [0, 2], positions: [[0, 1], [1, 1], [1, 2]]},
+        {piece: [1, 0], positions: [[0, 0], [2, 0], [1, 1]]},
+        {piece: [1, 1], positions: [[0, 0], [0, 1], [0, 2], [1, 0], [1, 2], [2, 0], [2, 1], [2, 2]]},
+        {piece: [1, 2], positions: [[0, 2], [1, 1], [2, 2]]},
+        {piece: [2, 0], positions: [[1, 0], [1, 1], [2, 1]]},
+        {piece: [2, 1], positions: [[2, 0], [1, 1], [2, 2]]},
+        {piece: [2, 2], positions: [[2, 1], [1, 1], [1, 2]]}
+      ];
 
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (player === 'blue' && board.flat().filter(value => value === 'blue').length < 3) {
-                if (logic === 'random_move') {
-                    RandomLogic(setBoard, checkForWin, player, setPlayer, board);
-                    console.log('RandomLogic ran!')
-                    console.log(moving);
+        if (!winner) {
+            const interval = setInterval(() => {
+                if (player === 'blue' && board.flat().filter(value => value === 'blue').length < 3) {
+                    if (logic === 'random_move') {
+                        RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    }
+                    else if (logic === 'minimax') {
+                        MinimaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    }
                 }
-            }
-        }, 1000);
+                else if (player === 'blue' && board.flat().filter(value => value === 'blue').length >= 3) {
+                    if (logic === 'random_move') {
+                        RandomLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    }
+                    else if (logic === 'minimax') {
+                        MinimaxLogic(setBoard, checkForWin, player, setPlayer, board, setWinner, playerPiecesRef.current)
+                    }
+                }
+            }, 1000)
+            return () => clearInterval(interval)
+        }
+    }, [board, player, winner])
 
-        return () => clearInterval(interval);
-    }, [board, player]);
+    useEffect(() => {
+        playerPiecesRef.current = board.flat().filter(value => value === player)
+      }, [board, player])
 
-    //logic for winning board state
     function checkForWin(board, player) {
         for (let i = 0; i < winningCombinations.length; i++) {
-            const [a, b, c] = winningCombinations[i];
+            const [a, b, c] = winningCombinations[i]
             if (
                 board[a[0]][a[1]] === player &&
                 board[b[0]][b[1]] === player &&
                 board[c[0]][c[1]] === player
             ) {
-                return true;
+                return true
             }
         }
-        return false;
-    };
+        return false
+    }
 
-    //for anytime a click happens on one of the board spots
+    function placePiece(newBoard, rowIndex, columnIndex, selectedPiece) {
+        newBoard[rowIndex][columnIndex] = player
+        newBoard[selectedPiece[0]][selectedPiece[1]] = null
+        setBoard(newBoard)
+        setSelectedPiece(null)
+
+        if (checkForWin(newBoard, player)) {
+            setWinner(player)
+            if (player === 'red') {
+                victorySound()
+            }
+            else if (player === 'blue') {
+                defeatSound()
+            }
+            console.log(`${player} wins!`)
+        } else setPlayer(player === 'red' ? 'blue' : 'red')
+    }
+
+
     const handleClick = (rowIndex, columnIndex) => {
-        console.log(board)
-        //select piece and move it to available adjacent empty spot
-        //make sure it's whoever's turns piece can move
-
-        //when piece moves delete old position (turn it back to white)
-        //and set new position to players color
-
-        //moving state
-        //positions state is an object with old position and new position
-        //which you set with a click handler
-
-
-        //if no spread operator, it'd be a singular array inside newBoard, instead of the multiple values
-        const newBoard = [...board];
-        if (player == 'red') {
-            
-
-            // check if cell is empty
-            // check if player has placed all three pieces
-            const playerPieces = newBoard.flat().filter(value => value === player);
-            if (playerPieces.length < 3) {
+        const newBoard = [...board]
+        if (player === 'red') {
+            // playerPiecesRef.current = newBoard.flat().filter(value => value === player)
+            if (playerPiecesRef.current.length < 3) {
                 // place new piece on the board
                 //if board is null set to player color, if not set it to what it originally was
                 if (!board[rowIndex][columnIndex]) {
                     newBoard[rowIndex][columnIndex] = player
-                    setBoard(newBoard);
-                    // setPosition({...position, current: [rowIndex, columnIndex]})
+                    setBoard(newBoard)
+                    if (checkForWin(newBoard, player)) {
+                        setWinner(player)
+                        //this one works only for red
+                        victorySound()
+
+                        console.log(`${player} wins!`)
+                    }
+                    setPlayer(player === 'red' ? 'blue' : 'red')
+
+                    console.log(`My pieces: ${playerPiecesRef.current.length}`)
                 }
-            } 
-            else if (playerPieces.length === 3) {
+            }
+            else if (playerPiecesRef.current.length === 3) {
+
+                if (board[rowIndex][columnIndex] === player) {
+                    setSelectedPiece([rowIndex, columnIndex])
+                }
+
+                if (checkForWin(newBoard, player)) {
+                    setWinner(player)
+                        victorySound()
+                    console.log(`${player} wins!`)
+                }
+                else if (selectedPiece) {
+                    if (!board[rowIndex][columnIndex]) {
+                        const validPositions = validMoves.find(move => move.piece[0] === selectedPiece[0] && move.piece[1] === selectedPiece[1]).positions;
+                        if (validPositions.some(position => position[0] === rowIndex && position[1] === columnIndex)) {
+                          placePiece(newBoard, rowIndex, columnIndex, selectedPiece);
+                        }
+                      }
+
+                }
+                else if (board[rowIndex][columnIndex] !== 'blue' || board[rowIndex][columnIndex] !== 'red' || board[rowIndex][columnIndex] !== null) {
+                    console.log('invalid option!')
+                }
+                else {
+                    setPlayer(player === 'red' ? 'blue' : 'red')
+                }
                 console.log(`${rowIndex}, ${columnIndex}`)
-                if (board[rowIndex][columnIndex] === 'red') {
-                    setPosition({...position, current: [rowIndex, columnIndex]})
-                    setMoving(true);
-
-                    console.log(moving);
-                }
             }
+            placingSound()
 
-        
 
-            if (checkForWin(newBoard, player)) {
-                console.log(`${player} wins!`);
-            } else {
-                setPlayer(player === 'red' ? 'blue' : 'red');
-            }
-
-            //when we click on a player piece it returns the rowIndex and columnIndex
-            
         }
-        if (moving) {
-            console.log('now true')
-            if (board[rowIndex][columnIndex] === null) setPosition(prev =>({...prev, new: [rowIndex, columnIndex]}))
-            console.log(position)
 
-            if(position.current && position.new){
-                newBoard[position.current[0]][position.current[1]] = null
-                newBoard[position.new[0]][position.new[1]] = "red"
-                setBoard(newBoard);
-            }
-        }
-        
-
-
-    };
-
+    }
 
     return (
         <div>
             <div className='triumph-regular top-middle' style={{ fontSize: '35px' }}>
-                {player == 'red' ? 'Your' : 'AI\'s'} TURN
+                {winner ? `${winner} wins` : player == 'red' ? 'Your TURN' : 'AI\'s TURN'}
             </div>
             <div className="board" style={{
                 backgroundImage: `url(${TapatanBoard})`,
                 backgroundRepeat: 'no-repeat',
-                // backgroundSize: 'cover',
                 backgroundPosition: `87px 88px`
             }}>
                 {/* <img src ={TapatanBoard} alt="Tapatan Board"/> */}
                 {board.map((row, rowIndex) => (
                     <div key={rowIndex} className="row">
                         {row.map((cell, columnIndex) => {
-                            const isRed = cell === 'red';
-                            const isBlue = cell === 'blue';
-                            const isEmpty = !isRed && !isBlue;
+                            const isRed = cell === 'red'
+                            const isBlue = cell === 'blue'
+                            const isEmpty = !isRed && !isBlue
                             return (
                                 <div
                                     key={columnIndex}
-                                    //highlights the box, but doesn't actually end up working for spaces with pieces on them
-                                    className={`cell ${selectedPiece && rowIndex === selectedPiece[0] && columnIndex === selectedPiece[1] ? 'selected' : ''}`}
+                                    //i forgot why i needed this, but i now can't get rid of it
+                                    className={`cell ${selectedPiece && rowIndex === selectedPiece[0] && columnIndex === selectedPiece[1] ? '' : ''}`}
                                 >
                                     {isRed && <ButtonCircle color="red" onClick={() => handleClick(rowIndex, columnIndex)} />}
                                     {isBlue && <ButtonCircle color="blue" onClick={() => handleClick(rowIndex, columnIndex)} />}
@@ -170,13 +199,13 @@ const Tapatan = ({ logic }) => {
                                     )}
                                 </div>
 
-                            );
+                            )
                         })}
                     </div>
                 ))}
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Tapatan;
+export default Tapatan
